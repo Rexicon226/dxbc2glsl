@@ -44,6 +44,9 @@ API const char* APIENTRY decompile_to_hlsl(const char* input, size_t inputSize) 
       glsl_options.version = 310;
       glsl_options.es = true;
       spirv_cross::CompilerHLSL::Options hlsl_options;
+      
+      hlsl_options.shader_model = 40;
+      hlsl_options.point_size_compat = true;
 
       hlsl.set_common_options(glsl_options);
       hlsl.set_hlsl_options(hlsl_options);
