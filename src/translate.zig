@@ -8,6 +8,7 @@ pub fn main() !void {
 
     var args = try std.process.argsWithAllocator(allocator);
     defer args.deinit();
+    _ = args.next();
 
     var file_path: ?[]const u8 = null;
     var output: Output = .hlsl;
@@ -21,7 +22,7 @@ pub fn main() !void {
             if (file_path != null) return error.TwoFilesGiven;
             file_path = arg;
         }
-    } else usage();
+    } 
 
     const contents = try std.fs.cwd().readFileAlloc(
         allocator,
@@ -31,8 +32,8 @@ pub fn main() !void {
     defer allocator.free(contents);
 
     const compiled = switch (output) {
-        .glsl => d2g.decompiled_to_glsl(contents.ptr, contents.len),
-        .hlsl => d2g.decompiled_to_hlsl(contents.ptr, contents.len),
+        .glsl => d2g.decompile_to_glsl(contents.ptr, contents.len),
+        .hlsl => d2g.decompile_to_hlsl(contents.ptr, contents.len),
     };
     defer d2g.free_compiled_string(compiled);
 

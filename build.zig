@@ -8,7 +8,7 @@ pub fn build(b: *std.Build) !void {
 
     const spirv = b.addLibrary(.{
         .name = "spirv",
-        .linkage = .dynamic,
+        .linkage = .static,
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
@@ -28,7 +28,7 @@ pub fn build(b: *std.Build) !void {
 
     const dxbc = b.addLibrary(.{
         .name = "dxbc",
-        .linkage = .dynamic,
+        .linkage = .static,
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
@@ -70,7 +70,7 @@ pub fn build(b: *std.Build) !void {
 
     const sc = b.addLibrary(.{
         .name = "spirv_cross",
-        .linkage = .dynamic,
+        .linkage = .static,
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
