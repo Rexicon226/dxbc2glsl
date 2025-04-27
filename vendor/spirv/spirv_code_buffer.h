@@ -6,6 +6,13 @@
 
 #include "spirv_instruction.h"
 
+#if defined(_WIN32)
+    #define API __declspec(dllexport)
+#else
+    #define API
+#endif
+
+
 namespace dxvk {
   
   /**
@@ -15,7 +22,7 @@ namespace dxvk {
    * Stores arbitrary SPIR-V instructions in a
    * format that can be read by Vulkan drivers.
    */
-  class SpirvCodeBuffer {
+  class API SpirvCodeBuffer {
     
   public:
     

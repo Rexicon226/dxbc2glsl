@@ -4,6 +4,13 @@
 
 #include "spirv_code_buffer.h"
 
+#if defined(_WIN32)
+    #define API __declspec(dllexport)
+#else
+    #define APIENTRY
+    #define API
+#endif
+
 namespace dxvk {
   
   struct SpirvPhiLabel {
@@ -51,7 +58,7 @@ namespace dxvk {
    * is valid, as defined in the SPIR-V 1.0 specification,
    * section 2.4 "Logical Layout of a Module".
    */
-  class SpirvModule {
+  class API SpirvModule {
     
   public:
     
@@ -76,280 +83,280 @@ namespace dxvk {
     uint32_t getBlockId() const {
       return m_blockId;
     }
-
-    uint32_t allocateId();
+ 
+    API uint32_t APIENTRY allocateId();
     
-    bool hasCapability(
+    API bool APIENTRY hasCapability(
             spv::Capability         capability);
 
-    void enableCapability(
+    API void APIENTRY enableCapability(
             spv::Capability         capability);
     
-    void enableExtension(
+    API void APIENTRY enableExtension(
       const char*                   extensionName);
     
-    void addEntryPoint(
+    API void APIENTRY addEntryPoint(
             uint32_t                entryPointId,
             spv::ExecutionModel     executionModel,
       const char*                   name);
     
-    void setMemoryModel(
+    API void APIENTRY setMemoryModel(
             spv::AddressingModel    addressModel,
             spv::MemoryModel        memoryModel);
     
-    void setExecutionMode(
+    API void APIENTRY setExecutionMode(
             uint32_t                entryPointId,
             spv::ExecutionMode      executionMode);
     
-    void setExecutionMode(
+    API void APIENTRY setExecutionMode(
             uint32_t                entryPointId,
             spv::ExecutionMode      executionMode,
             uint32_t                argCount,
       const uint32_t*               args);
     
-    void setInvocations(
+    API void APIENTRY setInvocations(
             uint32_t                entryPointId,
             uint32_t                invocations);
     
-    void setLocalSize(
+    API void APIENTRY setLocalSize(
             uint32_t                entryPointId,
             uint32_t                x,
             uint32_t                y,
             uint32_t                z);
     
-    void setOutputVertices(
+    API void APIENTRY setOutputVertices(
             uint32_t                entryPointId,
             uint32_t                vertexCount);
     
-    uint32_t addDebugString(
+    API uint32_t APIENTRY addDebugString(
       const char*                   string);
     
-    void setDebugSource(
+    API void APIENTRY setDebugSource(
             spv::SourceLanguage     language,
             uint32_t                version,
             uint32_t                file,
       const char*                   source);
     
-    void setDebugName(
+    API void APIENTRY setDebugName(
             uint32_t                expressionId,
       const char*                   debugName);
     
-    void setDebugMemberName(
+    API void APIENTRY setDebugMemberName(
             uint32_t                structId,
             uint32_t                memberId,
       const char*                   debugName);
     
-    uint32_t constBool(
+    API uint32_t APIENTRY constBool(
             bool                    v);
     
-    uint32_t consti32(
+    API uint32_t APIENTRY consti32(
             int32_t                 v);
     
-    uint32_t consti64(
+    API uint32_t APIENTRY consti64(
             int64_t                 v);
     
-    uint32_t constu32(
+    API uint32_t APIENTRY constu32(
             uint32_t                v);
     
-    uint32_t constu64(
+    API uint32_t APIENTRY constu64(
             uint64_t                v);
     
-    uint32_t constf32(
+    API uint32_t APIENTRY constf32(
             float                   v);
     
-    uint32_t constf64(
+    API uint32_t APIENTRY constf64(
             double                  v);
     
-    uint32_t constvec4i32(
+    API uint32_t APIENTRY constvec4i32(
             int32_t                 x,
             int32_t                 y,
             int32_t                 z,
             int32_t                 w);
 
-    uint32_t constvec4b32(
+    API uint32_t APIENTRY constvec4b32(
             bool                    x,
             bool                    y,
             bool                    z,
             bool                    w);
     
-    uint32_t constvec4u32(
+    API uint32_t APIENTRY constvec4u32(
             uint32_t                x,
             uint32_t                y,
             uint32_t                z,
             uint32_t                w);
 
-    uint32_t constvec2f32(
+    API uint32_t APIENTRY constvec2f32(
             float                   x,
             float                   y);
 
-    uint32_t constvec3f32(
+    API uint32_t APIENTRY constvec3f32(
             float                   x,
             float                   y,
             float                   z);
 
-    uint32_t constvec4f32(
+    API uint32_t APIENTRY constvec4f32(
             float                   x,
             float                   y,
             float                   z,
             float                   w);
 
-    uint32_t constfReplicant(
+    API uint32_t APIENTRY constfReplicant(
             float                   replicant,
             uint32_t                count);
 
-    uint32_t constbReplicant(
+    API uint32_t APIENTRY constbReplicant(
             bool                    replicant,
             uint32_t                count);
 
-    uint32_t constiReplicant(
+    API uint32_t APIENTRY constiReplicant(
             int32_t                 replicant,
             uint32_t                count);
 
-    uint32_t constuReplicant(
+    API uint32_t APIENTRY constuReplicant(
             int32_t                 replicant,
             uint32_t                count);
     
-    uint32_t constComposite(
+    API uint32_t APIENTRY constComposite(
             uint32_t                typeId,
             uint32_t                constCount,
       const uint32_t*               constIds);
     
-    uint32_t constUndef(
+    API uint32_t APIENTRY constUndef(
             uint32_t                typeId);
     
-    uint32_t lateConst32(
+    API uint32_t APIENTRY lateConst32(
             uint32_t                typeId);
 
-    void setLateConst(
+    API void APIENTRY setLateConst(
             uint32_t                constId,
       const uint32_t*               argIds);
 
-    uint32_t specConstBool(
+    API uint32_t APIENTRY specConstBool(
             bool                    v);
     
-    uint32_t specConst32(
+    API uint32_t APIENTRY specConst32(
             uint32_t                typeId,
             uint32_t                value);
     
-    void decorate(
+    API void APIENTRY decorate(
             uint32_t                object,
             spv::Decoration         decoration);
     
-    void decorateArrayStride(
+    API void APIENTRY decorateArrayStride(
             uint32_t                object,
             uint32_t                stride);
     
-    void decorateBinding(
+    API void APIENTRY decorateBinding(
             uint32_t                object,
             uint32_t                binding);
     
-    void decorateBlock(
+    API void APIENTRY decorateBlock(
             uint32_t                object);
     
-    void decorateBuiltIn(
+    API void APIENTRY decorateBuiltIn(
             uint32_t                object,
             spv::BuiltIn            builtIn);
     
-    void decorateComponent(
+    API void APIENTRY decorateComponent(
             uint32_t                object,
             uint32_t                location);
     
-    void decorateDescriptorSet(
+    API void APIENTRY decorateDescriptorSet(
             uint32_t                object,
             uint32_t                set);
     
-    void decorateIndex(
+    API void APIENTRY decorateIndex(
             uint32_t                object,
             uint32_t                index);
     
-    void decorateLocation(
+    API void APIENTRY decorateLocation(
             uint32_t                object,
             uint32_t                location);
     
-    void decorateSpecId(
+    API void APIENTRY decorateSpecId(
             uint32_t                object,
             uint32_t                specId);
     
-    void decorateXfb(
+    API void APIENTRY decorateXfb(
             uint32_t                object,
             uint32_t                streamId,
             uint32_t                bufferId,
             uint32_t                offset,
             uint32_t                stride);
     
-    void memberDecorateBuiltIn(
+    API void APIENTRY memberDecorateBuiltIn(
             uint32_t                structId,
             uint32_t                memberId,
             spv::BuiltIn            builtIn);
 
-    void memberDecorate(
+    API void APIENTRY memberDecorate(
             uint32_t                structId,
             uint32_t                memberId,
             spv::Decoration         decoration);
 
-    void memberDecorateMatrixStride(
+    API void APIENTRY memberDecorateMatrixStride(
             uint32_t                structId,
             uint32_t                memberId,
             uint32_t                stride);
     
-    void memberDecorateOffset(
+    API void APIENTRY memberDecorateOffset(
             uint32_t                structId,
             uint32_t                memberId,
             uint32_t                offset);
     
-    uint32_t defVoidType();
+    API uint32_t APIENTRY defVoidType();
     
-    uint32_t defBoolType();
+    API uint32_t APIENTRY defBoolType();
     
-    uint32_t defIntType(
+    API uint32_t APIENTRY defIntType(
             uint32_t                width,
             uint32_t                isSigned);
     
-    uint32_t defFloatType(
+    API uint32_t APIENTRY defFloatType(
             uint32_t                width);
     
-    uint32_t defVectorType(
+    API uint32_t APIENTRY defVectorType(
             uint32_t                elementType,
             uint32_t                elementCount);
     
-    uint32_t defMatrixType(
+    API uint32_t APIENTRY defMatrixType(
             uint32_t                columnType,
             uint32_t                columnCount);
     
-    uint32_t defArrayType(
+    API uint32_t APIENTRY defArrayType(
             uint32_t                typeId,
             uint32_t                length);
     
-    uint32_t defArrayTypeUnique(
+    API uint32_t APIENTRY defArrayTypeUnique(
             uint32_t                typeId,
             uint32_t                length);
     
-    uint32_t defRuntimeArrayType(
+    API uint32_t APIENTRY defRuntimeArrayType(
             uint32_t                typeId);
     
-    uint32_t defRuntimeArrayTypeUnique(
+    API uint32_t APIENTRY defRuntimeArrayTypeUnique(
             uint32_t                typeId);
     
-    uint32_t defFunctionType(
+    API uint32_t APIENTRY defFunctionType(
             uint32_t                returnType,
             uint32_t                argCount,
       const uint32_t*               argTypes);
     
-    uint32_t defStructType(
+    API uint32_t APIENTRY defStructType(
             uint32_t                memberCount,
       const uint32_t*               memberTypes);
     
-    uint32_t defStructTypeUnique(
+    API uint32_t APIENTRY defStructTypeUnique(
             uint32_t                memberCount,
       const uint32_t*               memberTypes);
     
-    uint32_t defPointerType(
+    API uint32_t APIENTRY defPointerType(
             uint32_t                variableType,
             spv::StorageClass       storageClass);
     
-    uint32_t defSamplerType();
+    API uint32_t APIENTRY defSamplerType();
     
-    uint32_t defImageType(
+    API uint32_t APIENTRY defImageType(
             uint32_t                sampledType,
             spv::Dim                dimensionality,
             uint32_t                depth,
@@ -358,68 +365,68 @@ namespace dxvk {
             uint32_t                sampled,
             spv::ImageFormat        format);
     
-    uint32_t defSampledImageType(
+    API uint32_t APIENTRY defSampledImageType(
             uint32_t                imageType);
     
-    uint32_t newVar(
+    API uint32_t APIENTRY newVar(
             uint32_t                pointerType,
             spv::StorageClass       storageClass);
     
-    uint32_t newVarInit(
+    API uint32_t APIENTRY newVarInit(
             uint32_t                pointerType,
             spv::StorageClass       storageClass,
             uint32_t                initialValue);
     
-    void functionBegin(
+    API void APIENTRY functionBegin(
             uint32_t                returnType,
             uint32_t                functionId,
             uint32_t                functionType,
       spv::FunctionControlMask      functionControl);
     
-    uint32_t functionParameter(
+    API uint32_t APIENTRY functionParameter(
             uint32_t                parameterType);
     
-    void functionEnd();
+    API void APIENTRY functionEnd();
 
-    uint32_t opAccessChain(
+    API uint32_t APIENTRY opAccessChain(
             uint32_t                resultType,
             uint32_t                composite,
             uint32_t                indexCount,
       const uint32_t*               indexArray);
     
-    uint32_t opArrayLength(
+    API uint32_t APIENTRY opArrayLength(
             uint32_t                resultType,
             uint32_t                structure,
             uint32_t                memberId);
     
-    uint32_t opAny(
+    API uint32_t APIENTRY opAny(
             uint32_t                resultType,
             uint32_t                vector);
     
-    uint32_t opAll(
+    API uint32_t APIENTRY opAll(
             uint32_t                resultType,
             uint32_t                vector);
     
-    uint32_t opAtomicLoad(
+    API uint32_t APIENTRY opAtomicLoad(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics);
             
-    void opAtomicStore(
+    API void APIENTRY opAtomicStore(
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
             
-    uint32_t opAtomicExchange(
+    API uint32_t APIENTRY opAtomicExchange(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
             
-    uint32_t opAtomicCompareExchange(
+    API uint32_t APIENTRY opAtomicCompareExchange(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
@@ -428,841 +435,841 @@ namespace dxvk {
             uint32_t                value,
             uint32_t                comparator);
             
-    uint32_t opAtomicIIncrement(
+    API uint32_t APIENTRY opAtomicIIncrement(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics);
             
-    uint32_t opAtomicIDecrement(
+    API uint32_t APIENTRY opAtomicIDecrement(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics);
             
-    uint32_t opAtomicIAdd(
+    API uint32_t APIENTRY opAtomicIAdd(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicISub(
+    API uint32_t APIENTRY opAtomicISub(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicSMin(
+    API uint32_t APIENTRY opAtomicSMin(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicSMax(
+    API uint32_t APIENTRY opAtomicSMax(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicUMin(
+    API uint32_t APIENTRY opAtomicUMin(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicUMax(
+    API uint32_t APIENTRY opAtomicUMax(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicAnd(
+    API uint32_t APIENTRY opAtomicAnd(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicOr(
+    API uint32_t APIENTRY opAtomicOr(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opAtomicXor(
+    API uint32_t APIENTRY opAtomicXor(
             uint32_t                resultType,
             uint32_t                pointer,
             uint32_t                scope,
             uint32_t                semantics,
             uint32_t                value);
     
-    uint32_t opBitcast(
+    API uint32_t APIENTRY opBitcast(
             uint32_t                resultType,
             uint32_t                operand);
             
-    uint32_t opBitCount(
+    API uint32_t APIENTRY opBitCount(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opBitReverse(
+    API uint32_t APIENTRY opBitReverse(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFindILsb(
+    API uint32_t APIENTRY opFindILsb(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFindUMsb(
+    API uint32_t APIENTRY opFindUMsb(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFindSMsb(
+    API uint32_t APIENTRY opFindSMsb(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opBitFieldInsert(
+    API uint32_t APIENTRY opBitFieldInsert(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                insert,
             uint32_t                offset,
             uint32_t                count);
     
-    uint32_t opBitFieldSExtract(
+    API uint32_t APIENTRY opBitFieldSExtract(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                offset,
             uint32_t                count);
     
-    uint32_t opBitFieldUExtract(
+    API uint32_t APIENTRY opBitFieldUExtract(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                offset,
             uint32_t                count);
     
-    uint32_t opBitwiseAnd(
+    API uint32_t APIENTRY opBitwiseAnd(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opBitwiseOr(
+    API uint32_t APIENTRY opBitwiseOr(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opBitwiseXor(
+    API uint32_t APIENTRY opBitwiseXor(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opNot(
+    API uint32_t APIENTRY opNot(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opShiftLeftLogical(
+    API uint32_t APIENTRY opShiftLeftLogical(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                shift);
     
-    uint32_t opShiftRightArithmetic(
+    API uint32_t APIENTRY opShiftRightArithmetic(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                shift);
     
-    uint32_t opShiftRightLogical(
+    API uint32_t APIENTRY opShiftRightLogical(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                shift);
     
-    uint32_t opConvertFtoS(
+    API uint32_t APIENTRY opConvertFtoS(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opConvertFtoU(
+    API uint32_t APIENTRY opConvertFtoU(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opConvertStoF(
+    API uint32_t APIENTRY opConvertStoF(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opConvertUtoF(
+    API uint32_t APIENTRY opConvertUtoF(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opCompositeConstruct(
+    API uint32_t APIENTRY opCompositeConstruct(
             uint32_t                resultType,
             uint32_t                valueCount,
       const uint32_t*               valueArray);
     
-    uint32_t opCompositeExtract(
+    API uint32_t APIENTRY opCompositeExtract(
             uint32_t                resultType,
             uint32_t                composite,
             uint32_t                indexCount,
       const uint32_t*               indexArray);
     
-    uint32_t opCompositeInsert(
+    API uint32_t APIENTRY opCompositeInsert(
             uint32_t                resultType,
             uint32_t                object,
             uint32_t                composite,
             uint32_t                indexCount,
       const uint32_t*               indexArray);
     
-    uint32_t opDpdx(
+    API uint32_t APIENTRY opDpdx(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opDpdy(
+    API uint32_t APIENTRY opDpdy(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opDpdxCoarse(
+    API uint32_t APIENTRY opDpdxCoarse(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opDpdyCoarse(
+    API uint32_t APIENTRY opDpdyCoarse(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opDpdxFine(
+    API uint32_t APIENTRY opDpdxFine(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opDpdyFine(
+    API uint32_t APIENTRY opDpdyFine(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opVectorExtractDynamic(
+    API uint32_t APIENTRY opVectorExtractDynamic(
             uint32_t                resultType,
             uint32_t                vector,
             uint32_t                index);
     
-    uint32_t opVectorShuffle(
+    API uint32_t APIENTRY opVectorShuffle(
             uint32_t                resultType,
             uint32_t                vectorLeft,
             uint32_t                vectorRight,
             uint32_t                indexCount,
       const uint32_t*               indexArray);
     
-    uint32_t opSNegate(
+    API uint32_t APIENTRY opSNegate(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFNegate(
+    API uint32_t APIENTRY opFNegate(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opSAbs(
+    API uint32_t APIENTRY opSAbs(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFAbs(
+    API uint32_t APIENTRY opFAbs(
             uint32_t                resultType,
             uint32_t                operand);
 
-    uint32_t opFSign(
+    API uint32_t APIENTRY opFSign(
             uint32_t                resultType,
             uint32_t                operand);
 
-    uint32_t opFMix(
+    API uint32_t APIENTRY opFMix(
             uint32_t                resultType,
             uint32_t                x,
             uint32_t                y,
             uint32_t                a);
 
-  uint32_t opCross(
+    API uint32_t APIENTRY opCross(
             uint32_t                resultType,
             uint32_t                x,
             uint32_t                y);
     
-    uint32_t opIAdd(
+    API uint32_t APIENTRY opIAdd(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opISub(
+    API uint32_t APIENTRY opISub(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opFAdd(
+    API uint32_t APIENTRY opFAdd(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opFSub(
+    API uint32_t APIENTRY opFSub(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opSDiv(
+    API uint32_t APIENTRY opSDiv(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opUDiv(
+    API uint32_t APIENTRY opUDiv(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opSRem(
+    API uint32_t APIENTRY opSRem(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opUMod(
+    API uint32_t APIENTRY opUMod(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opFDiv(
+    API uint32_t APIENTRY opFDiv(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opIMul(
+    API uint32_t APIENTRY opIMul(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opFMul(
+    API uint32_t APIENTRY opFMul(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
 
-    uint32_t opVectorTimesScalar(
+    API uint32_t APIENTRY opVectorTimesScalar(
             uint32_t                resultType,
             uint32_t                vector,
             uint32_t                scalar);
 
-    uint32_t opMatrixTimesMatrix(
+    API uint32_t APIENTRY opMatrixTimesMatrix(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
 
-    uint32_t opMatrixTimesVector(
+    API uint32_t APIENTRY opMatrixTimesVector(
             uint32_t                resultType,
             uint32_t                matrix,
             uint32_t                vector);
 
-    uint32_t opVectorTimesMatrix(
+    API uint32_t APIENTRY opVectorTimesMatrix(
             uint32_t                resultType,
             uint32_t                vector,
             uint32_t                matrix);
 
-    uint32_t opTranspose(
+    API uint32_t APIENTRY opTranspose(
             uint32_t                resultType,
             uint32_t                matrix);
 
-    uint32_t opInverse(
+    API uint32_t APIENTRY opInverse(
             uint32_t                resultType,
             uint32_t                matrix);
     
-    uint32_t opFFma(
+    API uint32_t APIENTRY opFFma(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b,
             uint32_t                c);
     
-    uint32_t opFMax(
+    API uint32_t APIENTRY opFMax(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opFMin(
+    API uint32_t APIENTRY opFMin(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opNMax(
+    API uint32_t APIENTRY opNMax(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opNMin(
+    API uint32_t APIENTRY opNMin(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opSMax(
+    API uint32_t APIENTRY opSMax(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opSMin(
+    API uint32_t APIENTRY opSMin(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opUMax(
+    API uint32_t APIENTRY opUMax(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opUMin(
+    API uint32_t APIENTRY opUMin(
             uint32_t                resultType,
             uint32_t                a,
             uint32_t                b);
     
-    uint32_t opFClamp(
+    API uint32_t APIENTRY opFClamp(
             uint32_t                resultType,
             uint32_t                x,
             uint32_t                minVal,
             uint32_t                maxVal);
     
-    uint32_t opNClamp(
+    API uint32_t APIENTRY opNClamp(
             uint32_t                resultType,
             uint32_t                x,
             uint32_t                minVal,
             uint32_t                maxVal);
     
-    uint32_t opIEqual(
+    API uint32_t APIENTRY opIEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opINotEqual(
+    API uint32_t APIENTRY opINotEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opSLessThan(
+    API uint32_t APIENTRY opSLessThan(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opSLessThanEqual(
+    API uint32_t APIENTRY opSLessThanEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opSGreaterThan(
+    API uint32_t APIENTRY opSGreaterThan(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opSGreaterThanEqual(
+    API uint32_t APIENTRY opSGreaterThanEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opULessThan(
+    API uint32_t APIENTRY opULessThan(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opULessThanEqual(
+    API uint32_t APIENTRY opULessThanEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opUGreaterThan(
+    API uint32_t APIENTRY opUGreaterThan(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opUGreaterThanEqual(
+    API uint32_t APIENTRY opUGreaterThanEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opFOrdEqual(
+    API uint32_t APIENTRY opFOrdEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opFOrdNotEqual(
+    API uint32_t APIENTRY opFOrdNotEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opFOrdLessThan(
+    API uint32_t APIENTRY opFOrdLessThan(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opFOrdLessThanEqual(
+    API uint32_t APIENTRY opFOrdLessThanEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opFOrdGreaterThan(
+    API uint32_t APIENTRY opFOrdGreaterThan(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opFOrdGreaterThanEqual(
+    API uint32_t APIENTRY opFOrdGreaterThanEqual(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opLogicalEqual(
+    API uint32_t APIENTRY opLogicalEqual(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opLogicalNotEqual(
+    API uint32_t APIENTRY opLogicalNotEqual(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opLogicalAnd(
+    API uint32_t APIENTRY opLogicalAnd(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opLogicalOr(
+    API uint32_t APIENTRY opLogicalOr(
             uint32_t                resultType,
             uint32_t                operand1,
             uint32_t                operand2);
     
-    uint32_t opLogicalNot(
+    API uint32_t APIENTRY opLogicalNot(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opDot(
+    API uint32_t APIENTRY opDot(
             uint32_t                resultType,
             uint32_t                vector1,
             uint32_t                vector2);
     
-    uint32_t opSin(
+    API uint32_t APIENTRY opSin(
             uint32_t                resultType,
             uint32_t                vector);
     
-    uint32_t opCos(
+    API uint32_t APIENTRY opCos(
             uint32_t                resultType,
             uint32_t                vector);
     
-    uint32_t opSqrt(
+    API uint32_t APIENTRY opSqrt(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opInverseSqrt(
+    API uint32_t APIENTRY opInverseSqrt(
             uint32_t                resultType,
             uint32_t                operand);
 
-    uint32_t opNormalize(
+    API uint32_t APIENTRY opNormalize(
             uint32_t                resultType,
             uint32_t                operand);
 
-    uint32_t opReflect(
+    API uint32_t APIENTRY opReflect(
             uint32_t                resultType,
             uint32_t                incident,
             uint32_t                normal);
 
-    uint32_t opLength(
+    API uint32_t APIENTRY opLength(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opExp2(
+    API uint32_t APIENTRY opExp2(
             uint32_t                resultType,
             uint32_t                operand);
 
-    uint32_t opExp(
+    API uint32_t APIENTRY opExp(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opLog2(
+    API uint32_t APIENTRY opLog2(
             uint32_t                resultType,
             uint32_t                operand);
 
-    uint32_t opPow(
+    API uint32_t APIENTRY opPow(
             uint32_t                resultType,
             uint32_t                base,
             uint32_t                exponent);
     
-    uint32_t opFract(
+    API uint32_t APIENTRY opFract(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opCeil(
+    API uint32_t APIENTRY opCeil(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFloor(
+    API uint32_t APIENTRY opFloor(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opRound(
+    API uint32_t APIENTRY opRound(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opRoundEven(
+    API uint32_t APIENTRY opRoundEven(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opTrunc(
+    API uint32_t APIENTRY opTrunc(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFConvert(
+    API uint32_t APIENTRY opFConvert(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opPackHalf2x16(
+    API uint32_t APIENTRY opPackHalf2x16(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opUnpackHalf2x16(
+    API uint32_t APIENTRY opUnpackHalf2x16(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opSelect(
+    API uint32_t APIENTRY opSelect(
             uint32_t                resultType,
             uint32_t                condition,
             uint32_t                operand1,
             uint32_t                operand2);
 
-    uint32_t opIsNan(
+    API uint32_t APIENTRY opIsNan(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opIsInf(
+    API uint32_t APIENTRY opIsInf(
             uint32_t                resultType,
             uint32_t                operand);
     
-    uint32_t opFunctionCall(
+    API uint32_t APIENTRY opFunctionCall(
             uint32_t                resultType,
             uint32_t                functionId,
             uint32_t                argCount,
       const uint32_t*               argIds);
     
-    void opLabel(
+    API void APIENTRY opLabel(
             uint32_t                labelId);
     
-    uint32_t opLoad(
+    API uint32_t APIENTRY opLoad(
             uint32_t                typeId,
             uint32_t                pointerId);
 
-    uint32_t opLoad(
+    API uint32_t APIENTRY opLoad(
             uint32_t                typeId,
             uint32_t                pointerId,
       const SpirvMemoryOperands&    operands);
 
-    void opStore(
+    API void APIENTRY opStore(
             uint32_t                pointerId,
             uint32_t                valueId);
 
-    void opStore(
+    API void APIENTRY opStore(
             uint32_t                pointerId,
             uint32_t                valueId,
       const SpirvMemoryOperands&    operands);
 
-    uint32_t opInterpolateAtCentroid(
+    API uint32_t APIENTRY opInterpolateAtCentroid(
             uint32_t                resultType,
             uint32_t                interpolant);
     
-    uint32_t opInterpolateAtSample(
+    API uint32_t APIENTRY opInterpolateAtSample(
             uint32_t                resultType,
             uint32_t                interpolant,
             uint32_t                sample);
     
-    uint32_t opInterpolateAtOffset(
+    API uint32_t APIENTRY opInterpolateAtOffset(
             uint32_t                resultType,
             uint32_t                interpolant,
             uint32_t                offset);
 
-    uint32_t opImage(
+    API uint32_t APIENTRY opImage(
             uint32_t                resultType,
             uint32_t                sampledImage);
     
-    uint32_t opImageRead(
+    API uint32_t APIENTRY opImageRead(
             uint32_t                resultType,
             uint32_t                image,
             uint32_t                coordinates,
       const SpirvImageOperands&     operands);
     
-    void opImageWrite(
+    API void APIENTRY opImageWrite(
             uint32_t                image,
             uint32_t                coordinates,
             uint32_t                texel,
       const SpirvImageOperands&     operands);
 
-    uint32_t opImageSparseTexelsResident(
+    API uint32_t APIENTRY opImageSparseTexelsResident(
             uint32_t                resultType,
             uint32_t                residentCode);
 
-    uint32_t opImageTexelPointer(
+    API uint32_t APIENTRY opImageTexelPointer(
             uint32_t                resultType,
             uint32_t                image,
             uint32_t                coordinates,
             uint32_t                sample);
     
-    uint32_t opSampledImage(
+    API uint32_t APIENTRY opSampledImage(
             uint32_t                resultType,
             uint32_t                image,
             uint32_t                sampler);
     
-    uint32_t opImageQuerySizeLod(
+    API uint32_t APIENTRY opImageQuerySizeLod(
             uint32_t                resultType,
             uint32_t                image,
             uint32_t                lod);
     
-    uint32_t opImageQuerySize(
+    API uint32_t APIENTRY opImageQuerySize(
             uint32_t                resultType,
             uint32_t                image);
     
-    uint32_t opImageQueryLevels(
+    API uint32_t APIENTRY opImageQueryLevels(
             uint32_t                resultType,
             uint32_t                image);
     
-    uint32_t opImageQueryLod(
+    API uint32_t APIENTRY opImageQueryLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates);
     
-    uint32_t opImageQuerySamples(
+    API uint32_t APIENTRY opImageQuerySamples(
             uint32_t                resultType,
             uint32_t                image);
     
-    uint32_t opImageFetch(
+    API uint32_t APIENTRY opImageFetch(
             uint32_t                resultType,
             uint32_t                image,
             uint32_t                coordinates,
       const SpirvImageOperands&     operands);
     
-    uint32_t opImageGather(
+    API uint32_t APIENTRY opImageGather(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
             uint32_t                component,
       const SpirvImageOperands&     operands);
     
-    uint32_t opImageDrefGather(
+    API uint32_t APIENTRY opImageDrefGather(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
             uint32_t                reference,
       const SpirvImageOperands&     operands);
     
-    uint32_t opImageSampleImplicitLod(
+    API uint32_t APIENTRY opImageSampleImplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
       const SpirvImageOperands&     operands);
     
-    uint32_t opImageSampleExplicitLod(
+    API uint32_t APIENTRY opImageSampleExplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
       const SpirvImageOperands&     operands);
 
-    uint32_t opImageSampleProjImplicitLod(
+    API uint32_t APIENTRY opImageSampleProjImplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
       const SpirvImageOperands&     operands);
 
-    uint32_t opImageSampleProjExplicitLod(
+    API uint32_t APIENTRY opImageSampleProjExplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
       const SpirvImageOperands&     operands);
     
-    uint32_t opImageSampleDrefImplicitLod(
+    API uint32_t APIENTRY opImageSampleDrefImplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
             uint32_t                reference,
       const SpirvImageOperands&     operands);
     
-    uint32_t opImageSampleDrefExplicitLod(
+    API uint32_t APIENTRY opImageSampleDrefExplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
             uint32_t                reference,
       const SpirvImageOperands&     operands);
 
-    uint32_t opImageSampleProjDrefImplicitLod(
+    API uint32_t APIENTRY opImageSampleProjDrefImplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
             uint32_t                reference,
       const SpirvImageOperands&     operands);
 
-    uint32_t opImageSampleProjDrefExplicitLod(
+    API uint32_t APIENTRY opImageSampleProjDrefExplicitLod(
             uint32_t                resultType,
             uint32_t                sampledImage,
             uint32_t                coordinates,
             uint32_t                reference,
       const SpirvImageOperands&     operands);
 
-    uint32_t opGroupNonUniformBallot(
+    API uint32_t APIENTRY opGroupNonUniformBallot(
             uint32_t                resultType,
             uint32_t                execution,
             uint32_t                predicate);
     
-    uint32_t opGroupNonUniformBallotBitCount(
+    API uint32_t APIENTRY opGroupNonUniformBallotBitCount(
             uint32_t                resultType,
             uint32_t                execution,
             uint32_t                operation,
             uint32_t                ballot);
     
-    uint32_t opGroupNonUniformElect(
+    API uint32_t APIENTRY opGroupNonUniformElect(
             uint32_t                resultType,
             uint32_t                execution);
     
-    uint32_t opGroupNonUniformBroadcastFirst(
+    API uint32_t APIENTRY opGroupNonUniformBroadcastFirst(
             uint32_t                resultType,
             uint32_t                execution,
             uint32_t                value);
     
-    void opControlBarrier(
+    API void APIENTRY opControlBarrier(
             uint32_t                execution,
             uint32_t                memory,
             uint32_t                semantics);
     
-    void opMemoryBarrier(
+    API void APIENTRY opMemoryBarrier(
             uint32_t                memory,
             uint32_t                semantics);
     
-    void opLoopMerge(
+    API void APIENTRY opLoopMerge(
             uint32_t                mergeBlock,
             uint32_t                continueTarget,
             uint32_t                loopControl);
     
-    void opSelectionMerge(
+    API void APIENTRY opSelectionMerge(
             uint32_t                mergeBlock,
             uint32_t                selectionControl);
     
-    void opBranch(
+    API void APIENTRY opBranch(
             uint32_t                label);
     
-    void opBranchConditional(
+    API void APIENTRY opBranchConditional(
             uint32_t                condition,
             uint32_t                trueLabel,
             uint32_t                falseLabel);
     
-    void opSwitch(
+    API void APIENTRY opSwitch(
             uint32_t                selector,
             uint32_t                jumpDefault,
             uint32_t                caseCount,
       const SpirvSwitchCaseLabel*   caseLabels);
     
-    uint32_t opPhi(
+    API uint32_t APIENTRY opPhi(
             uint32_t                resultType,
             uint32_t                sourceCount,
       const SpirvPhiLabel*          sourceLabels);
     
-    void opReturn();
+    API void APIENTRY opReturn();
     
-    void opDemoteToHelperInvocation();
+    API void APIENTRY opDemoteToHelperInvocation();
     
-    void opEmitVertex(
+    API void APIENTRY opEmitVertex(
             uint32_t                streamId);
     
-    void opEndPrimitive(
+    API void APIENTRY opEndPrimitive(
             uint32_t                streamId);
 
-    void opBeginInvocationInterlock();
+    API void APIENTRY opBeginInvocationInterlock();
 
-    void opEndInvocationInterlock();
+    API void APIENTRY opEndInvocationInterlock();
 
   private:
     
@@ -1287,32 +1294,32 @@ namespace dxvk {
 
     std::vector<uint32_t> m_interfaceVars;
 
-    uint32_t defType(
+    API uint32_t APIENTRY defType(
             spv::Op                 op, 
             uint32_t                argCount,
       const uint32_t*               argIds);
     
-    uint32_t defConst(
+    API uint32_t APIENTRY defConst(
             spv::Op                 op,
             uint32_t                typeId,
             uint32_t                argCount,
       const uint32_t*               argIds);
     
-    void instImportGlsl450();
+    API void APIENTRY instImportGlsl450();
     
-    uint32_t getMemoryOperandWordCount(
+    API uint32_t APIENTRY getMemoryOperandWordCount(
       const SpirvMemoryOperands&    op) const;
 
-    void putMemoryOperands(
+    API void APIENTRY putMemoryOperands(
       const SpirvMemoryOperands&    op);
 
-    uint32_t getImageOperandWordCount(
+    API uint32_t APIENTRY getImageOperandWordCount(
       const SpirvImageOperands&     op) const;
     
-    void putImageOperands(
+    API void APIENTRY putImageOperands(
       const SpirvImageOperands&     op);
 
-    bool isInterfaceVar(
+    API bool APIENTRY isInterfaceVar(
             spv::StorageClass       sclass) const;
 
   };

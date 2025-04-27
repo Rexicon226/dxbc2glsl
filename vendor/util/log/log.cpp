@@ -3,6 +3,8 @@
 #include "log.h"
 #include "../util_env.h"
 
+dxvk::Logger dxvk::Logger::s_instance("dxbc.log");
+
 namespace dxvk {
   
   Logger::Logger(const std::string& fileName)

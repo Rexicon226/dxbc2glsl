@@ -3,8 +3,6 @@
 #include <log/log.h>
 #include <spirv_cross/spirv_glsl.hpp>
 
-dxvk::Logger dxvk::Logger::s_instance("dxbc.log");
-
 API const char* APIENTRY decompile_to_string(const char* input, size_t inputSize) {
   try {
       dxvk::DxbcReader reader(input, inputSize);

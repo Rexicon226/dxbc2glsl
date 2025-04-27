@@ -8,13 +8,12 @@ pub fn build(b: *std.Build) !void {
 
     const spirv = b.addLibrary(.{
         .name = "spirv",
-        .linkage = .static,
+        .linkage = .dynamic,
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
         }),
     });
-    spirv.root_module.pic = true;
     spirv.linkLibCpp();
 
     spirv.addCSourceFiles(.{
@@ -25,12 +24,11 @@ pub fn build(b: *std.Build) !void {
         },
     });
     spirv.addIncludePath(b.path("vendor/spirv_cross"));
-    spirv.addIncludePath(b.path("vendor/include/windows"));
     b.installArtifact(spirv);
 
     const dxbc = b.addLibrary(.{
         .name = "dxbc",
-        .linkage = .static,
+        .linkage = .dynamic,
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
@@ -54,7 +52,6 @@ pub fn build(b: *std.Build) !void {
             "dxbc_reader.cpp",
             "dxbc_util.cpp",
         },
-        .flags = &.{"-std=c++20"},
     });
     dxbc.addCSourceFiles(.{
         .root = b.path("vendor/util"),
@@ -64,18 +61,16 @@ pub fn build(b: *std.Build) !void {
             "util_env.cpp",
             "util_string.cpp",
         },
-        .flags = &.{"-std=c++20"},
     });
     dxbc.addIncludePath(b.path("vendor/util"));
     dxbc.addIncludePath(b.path("vendor/spirv_cross"));
     dxbc.addIncludePath(vk.path("include"));
-
     dxbc.linkLibrary(spirv);
     b.installArtifact(dxbc);
 
     const sc = b.addLibrary(.{
         .name = "spirv_cross",
-        .linkage = .static,
+        .linkage = .dynamic,
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
@@ -101,7 +96,7 @@ pub fn build(b: *std.Build) !void {
     b.installArtifact(sc);
 
     const driver = b.addLibrary(.{
-        .linkage = .static,
+        .linkage = .dynamic,
         .name = "dxbc2glsl",
         .root_module = b.createModule(.{
             .target = target,

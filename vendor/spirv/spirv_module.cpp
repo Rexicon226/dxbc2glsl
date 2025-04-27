@@ -4,7 +4,7 @@
 
 namespace dxvk {
   
-  SpirvModule::SpirvModule(uint32_t version)
+  API SpirvModule::SpirvModule(uint32_t version)
   : m_version(version) {
     this->instImportGlsl450();
   }
@@ -15,7 +15,7 @@ namespace dxvk {
   }
   
   
-  SpirvCodeBuffer SpirvModule::compile() const {
+  API SpirvCodeBuffer SpirvModule::compile() const {
     SpirvCodeBuffer result;
     result.putHeader(m_version, m_id);
     result.append(m_capabilities);
@@ -33,7 +33,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::allocateId() {
+  API uint32_t APIENTRY SpirvModule::allocateId() {
     return m_id++;
   }
   
@@ -48,7 +48,7 @@ namespace dxvk {
     return false;
   }
 
-  void SpirvModule::enableCapability(
+  API void APIENTRY SpirvModule::enableCapability(
           spv::Capability         capability) {
     // Scan the generated instructions to check
     // whether we already enabled the capability.
@@ -59,14 +59,14 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::enableExtension(
+  API void APIENTRY SpirvModule::enableExtension(
     const char*                   extensionName) {
     m_extensions.putIns (spv::OpExtension, 1 + m_extensions.strLen(extensionName));
     m_extensions.putStr (extensionName);
   }
   
   
-  void SpirvModule::addEntryPoint(
+  API void APIENTRY SpirvModule::addEntryPoint(
           uint32_t                entryPointId,
           spv::ExecutionModel     executionModel,
     const char*                   name) {
@@ -80,7 +80,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::setMemoryModel(
+  API void APIENTRY SpirvModule::setMemoryModel(
           spv::AddressingModel    addressModel,
           spv::MemoryModel        memoryModel) {
     m_memoryModel.putIns  (spv::OpMemoryModel, 3);
@@ -89,7 +89,7 @@ namespace dxvk {
   }
   
     
-  void SpirvModule::setExecutionMode(
+  API void APIENTRY SpirvModule::setExecutionMode(
           uint32_t                entryPointId,
           spv::ExecutionMode      executionMode) {
     m_execModeInfo.putIns (spv::OpExecutionMode, 3);
@@ -98,7 +98,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::setExecutionMode(
+  API void APIENTRY SpirvModule::setExecutionMode(
           uint32_t                entryPointId,
           spv::ExecutionMode      executionMode,
           uint32_t                argCount,
@@ -112,7 +112,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::setInvocations(
+  API void APIENTRY SpirvModule::setInvocations(
           uint32_t                entryPointId,
           uint32_t                invocations) {
     m_execModeInfo.putIns  (spv::OpExecutionMode, 4);
@@ -122,7 +122,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::setLocalSize(
+  API void APIENTRY SpirvModule::setLocalSize(
           uint32_t                entryPointId,
           uint32_t                x,
           uint32_t                y,
@@ -136,7 +136,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::setOutputVertices(
+  API void APIENTRY SpirvModule::setOutputVertices(
           uint32_t                entryPointId,
           uint32_t                vertexCount) {
     m_execModeInfo.putIns (spv::OpExecutionMode, 4);
@@ -146,7 +146,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::addDebugString(
+  API uint32_t APIENTRY SpirvModule::addDebugString(
     const char*                   string) {
     uint32_t resultId = this->allocateId();
     
@@ -158,7 +158,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::setDebugSource(
+  API void APIENTRY SpirvModule::setDebugSource(
           spv::SourceLanguage     language,
           uint32_t                version,
           uint32_t                file,
@@ -175,7 +175,7 @@ namespace dxvk {
       m_debugNames.putStr(source);
   }
   
-  void SpirvModule::setDebugName(
+  API void APIENTRY SpirvModule::setDebugName(
           uint32_t                expressionId,
     const char*                   debugName) {
     m_debugNames.putIns (spv::OpName, 2 + m_debugNames.strLen(debugName));
@@ -184,7 +184,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::setDebugMemberName(
+  API void APIENTRY SpirvModule::setDebugMemberName(
           uint32_t                structId,
           uint32_t                memberId,
     const char*                   debugName) {
@@ -195,7 +195,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constBool(
+  API uint32_t APIENTRY SpirvModule::constBool(
           bool                    v) {
     return this->defConst(v
         ? spv::OpConstantTrue
@@ -205,7 +205,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::consti32(
+  API uint32_t APIENTRY SpirvModule::consti32(
           int32_t                 v) {
     std::array<uint32_t, 1> data;
     std::memcpy(data.data(), &v, sizeof(v));
@@ -218,7 +218,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::consti64(
+  API uint32_t APIENTRY SpirvModule::consti64(
           int64_t                 v) {
     std::array<uint32_t, 2> data;
     std::memcpy(data.data(), &v, sizeof(v));
@@ -231,7 +231,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constu32(
+  API uint32_t APIENTRY SpirvModule::constu32(
           uint32_t                v) {
     std::array<uint32_t, 1> data;
     std::memcpy(data.data(), &v, sizeof(v));
@@ -244,7 +244,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constu64(
+  API uint32_t APIENTRY SpirvModule::constu64(
           uint64_t                v) {
     std::array<uint32_t, 2> data;
     std::memcpy(data.data(), &v, sizeof(v));
@@ -257,7 +257,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constf32(
+  API uint32_t APIENTRY SpirvModule::constf32(
           float                   v) {
     std::array<uint32_t, 1> data;
     std::memcpy(data.data(), &v, sizeof(v));
@@ -270,7 +270,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constf64(
+  API uint32_t APIENTRY SpirvModule::constf64(
           double                  v) {
     std::array<uint32_t, 2> data;
     std::memcpy(data.data(), &v, sizeof(v));
@@ -283,7 +283,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constvec4i32(
+  API uint32_t APIENTRY SpirvModule::constvec4i32(
           int32_t                 x,
           int32_t                 y,
           int32_t                 z,
@@ -300,7 +300,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::constvec4b32(
+  API uint32_t APIENTRY SpirvModule::constvec4b32(
           bool                    x,
           bool                    y,
           bool                    z,
@@ -317,7 +317,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constvec4u32(
+  API uint32_t APIENTRY SpirvModule::constvec4u32(
           uint32_t                x,
           uint32_t                y,
           uint32_t                z,
@@ -334,7 +334,7 @@ namespace dxvk {
   }
   
 
-  uint32_t SpirvModule::constvec2f32(
+  API uint32_t APIENTRY SpirvModule::constvec2f32(
           float                   x,
           float                   y) {
     std::array<uint32_t, 2> args = {{
@@ -348,7 +348,7 @@ namespace dxvk {
   }
   
 
-  uint32_t SpirvModule::constvec3f32(
+  API uint32_t APIENTRY SpirvModule::constvec3f32(
           float                   x,
           float                   y,
           float                   z) {
@@ -364,7 +364,7 @@ namespace dxvk {
   }
 
   
-  uint32_t SpirvModule::constvec4f32(
+  API uint32_t APIENTRY SpirvModule::constvec4f32(
           float                   x,
           float                   y,
           float                   z,
@@ -381,7 +381,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::constfReplicant(
+  API uint32_t APIENTRY SpirvModule::constfReplicant(
           float                   replicant,
           uint32_t                count) {
     uint32_t value = this->constf32(replicant);
@@ -399,7 +399,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::constbReplicant(
+  API uint32_t APIENTRY SpirvModule::constbReplicant(
           bool                    replicant,
           uint32_t                count) {
     uint32_t value = this->constBool(replicant);
@@ -417,7 +417,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::constiReplicant(
+  API uint32_t APIENTRY SpirvModule::constiReplicant(
           int32_t                 replicant,
           uint32_t                count) {
     uint32_t value = this->consti32(replicant);
@@ -435,7 +435,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::constuReplicant(
+  API uint32_t APIENTRY SpirvModule::constuReplicant(
           int32_t                 replicant,
           uint32_t                count) {
     uint32_t value = this->constu32(replicant);
@@ -453,7 +453,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constComposite(
+  API uint32_t APIENTRY SpirvModule::constComposite(
           uint32_t                typeId,
           uint32_t                constCount,
     const uint32_t*               constIds) {
@@ -463,14 +463,14 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::constUndef(
+  API uint32_t APIENTRY SpirvModule::constUndef(
           uint32_t                typeId) {
     return this->defConst(spv::OpUndef,
       typeId, 0, nullptr);
   }
 
 
-  uint32_t SpirvModule::lateConst32(
+  API uint32_t APIENTRY SpirvModule::lateConst32(
           uint32_t                typeId) {
     uint32_t resultId = this->allocateId();
     m_lateConsts.insert(resultId);
@@ -483,7 +483,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::setLateConst(
+  API void APIENTRY SpirvModule::setLateConst(
             uint32_t                constId,
       const uint32_t*               argIds) {
     for (auto ins : m_typeConstDefs) {
@@ -502,7 +502,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::specConstBool(
+  API uint32_t APIENTRY SpirvModule::specConstBool(
           bool                    v) {
     uint32_t typeId   = this->defBoolType();
     uint32_t resultId = this->allocateId();
@@ -518,7 +518,7 @@ namespace dxvk {
   }
     
   
-  uint32_t SpirvModule::specConst32(
+  API uint32_t APIENTRY SpirvModule::specConst32(
           uint32_t                typeId,
           uint32_t                value) {
     uint32_t resultId = this->allocateId();
@@ -531,7 +531,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorate(
+  API void APIENTRY SpirvModule::decorate(
           uint32_t                object,
           spv::Decoration         decoration) {
     m_annotations.putIns  (spv::OpDecorate, 3);
@@ -540,7 +540,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateArrayStride(
+  API void APIENTRY SpirvModule::decorateArrayStride(
           uint32_t                object,
           uint32_t                stride) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -550,7 +550,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateBinding(
+  API void APIENTRY SpirvModule::decorateBinding(
           uint32_t                object,
           uint32_t                binding) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -560,14 +560,14 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateBlock(uint32_t object) {
+  API void APIENTRY SpirvModule::decorateBlock(uint32_t object) {
     m_annotations.putIns  (spv::OpDecorate, 3);
     m_annotations.putWord (object);
     m_annotations.putWord (spv::DecorationBlock);
   }
   
   
-  void SpirvModule::decorateBuiltIn(
+  API void APIENTRY SpirvModule::decorateBuiltIn(
           uint32_t                object,
           spv::BuiltIn            builtIn) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -577,7 +577,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateComponent(
+  API void APIENTRY SpirvModule::decorateComponent(
           uint32_t                object,
           uint32_t                location) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -587,7 +587,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateDescriptorSet(
+  API void APIENTRY SpirvModule::decorateDescriptorSet(
           uint32_t                object,
           uint32_t                set) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -597,7 +597,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateIndex(
+  API void APIENTRY SpirvModule::decorateIndex(
           uint32_t                object,
           uint32_t                index) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -607,7 +607,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::decorateLocation(
+  API void APIENTRY SpirvModule::decorateLocation(
           uint32_t                object,
           uint32_t                location) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -617,7 +617,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::decorateSpecId(
+  API void APIENTRY SpirvModule::decorateSpecId(
           uint32_t                object,
           uint32_t                specId) {
     m_annotations.putIns  (spv::OpDecorate, 4);
@@ -627,7 +627,7 @@ namespace dxvk {
   }
   
 
-  void SpirvModule::decorateXfb(
+  API void APIENTRY SpirvModule::decorateXfb(
           uint32_t                object,
           uint32_t                streamId,
           uint32_t                bufferId,
@@ -655,7 +655,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::memberDecorateBuiltIn(
+  API void APIENTRY SpirvModule::memberDecorateBuiltIn(
           uint32_t                structId,
           uint32_t                memberId,
           spv::BuiltIn            builtIn) {
@@ -667,7 +667,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::memberDecorate(
+  API void APIENTRY SpirvModule::memberDecorate(
           uint32_t                structId,
           uint32_t                memberId,
           spv::Decoration         decoration) {
@@ -678,7 +678,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::memberDecorateMatrixStride(
+  API void APIENTRY SpirvModule::memberDecorateMatrixStride(
           uint32_t                structId,
           uint32_t                memberId,
           uint32_t                stride) {
@@ -690,7 +690,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::memberDecorateOffset(
+  API void APIENTRY SpirvModule::memberDecorateOffset(
           uint32_t                structId,
           uint32_t                memberId,
           uint32_t                offset) {
@@ -702,17 +702,17 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defVoidType() {
+  API uint32_t APIENTRY SpirvModule::defVoidType() {
     return this->defType(spv::OpTypeVoid, 0, nullptr);
   }
   
   
-  uint32_t SpirvModule::defBoolType() {
+  API uint32_t APIENTRY SpirvModule::defBoolType() {
     return this->defType(spv::OpTypeBool, 0, nullptr);
   }
   
   
-  uint32_t SpirvModule::defIntType(
+  API uint32_t APIENTRY SpirvModule::defIntType(
           uint32_t                width,
           uint32_t                isSigned) {
     std::array<uint32_t, 2> args = {{ width, isSigned }};
@@ -721,7 +721,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defFloatType(
+  API uint32_t APIENTRY SpirvModule::defFloatType(
           uint32_t                width) {
     std::array<uint32_t, 1> args = {{ width }};
     return this->defType(spv::OpTypeFloat,
@@ -729,7 +729,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defVectorType(
+  API uint32_t APIENTRY SpirvModule::defVectorType(
           uint32_t                elementType,
           uint32_t                elementCount) {
     std::array<uint32_t, 2> args =
@@ -740,7 +740,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defMatrixType(
+  API uint32_t APIENTRY SpirvModule::defMatrixType(
           uint32_t                columnType,
           uint32_t                columnCount) {
     std::array<uint32_t, 2> args =
@@ -751,7 +751,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defArrayType(
+  API uint32_t APIENTRY SpirvModule::defArrayType(
           uint32_t                typeId,
           uint32_t                length) {
     std::array<uint32_t, 2> args = {{ typeId, length }};
@@ -761,7 +761,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defArrayTypeUnique(
+  API uint32_t APIENTRY SpirvModule::defArrayTypeUnique(
           uint32_t                typeId,
           uint32_t                length) {
     uint32_t resultId = this->allocateId();
@@ -774,7 +774,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defRuntimeArrayType(
+  API uint32_t APIENTRY SpirvModule::defRuntimeArrayType(
           uint32_t                typeId) {
     std::array<uint32_t, 1> args = { typeId };
     
@@ -783,7 +783,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defRuntimeArrayTypeUnique(
+  API uint32_t APIENTRY SpirvModule::defRuntimeArrayTypeUnique(
           uint32_t                typeId) {
     uint32_t resultId = this->allocateId();
     
@@ -794,7 +794,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defFunctionType(
+  API uint32_t APIENTRY SpirvModule::defFunctionType(
           uint32_t                returnType,
           uint32_t                argCount,
     const uint32_t*               argTypes) {
@@ -809,7 +809,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defStructType(
+  API uint32_t APIENTRY SpirvModule::defStructType(
           uint32_t                memberCount,
     const uint32_t*               memberTypes) {
     return this->defType(spv::OpTypeStruct,
@@ -817,7 +817,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defStructTypeUnique(
+  API uint32_t APIENTRY SpirvModule::defStructTypeUnique(
           uint32_t                memberCount,
     const uint32_t*               memberTypes) {
     uint32_t resultId = this->allocateId();
@@ -831,7 +831,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defPointerType(
+  API uint32_t APIENTRY SpirvModule::defPointerType(
           uint32_t                variableType,
           spv::StorageClass       storageClass) {
     std::array<uint32_t, 2> args = {{
@@ -844,12 +844,12 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defSamplerType() {
+  API uint32_t APIENTRY SpirvModule::defSamplerType() {
     return this->defType(spv::OpTypeSampler, 0, nullptr);
   }
   
   
-  uint32_t SpirvModule::defImageType(
+  API uint32_t APIENTRY SpirvModule::defImageType(
           uint32_t                sampledType,
           spv::Dim                dimensionality,
           uint32_t                depth,
@@ -871,13 +871,13 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defSampledImageType(
+  API uint32_t APIENTRY SpirvModule::defSampledImageType(
           uint32_t                imageType) {
     return this->defType(spv::OpTypeSampledImage, 1, &imageType);
   }
   
   
-  uint32_t SpirvModule::newVar(
+  API uint32_t APIENTRY SpirvModule::newVar(
           uint32_t                pointerType,
           spv::StorageClass       storageClass) {
     uint32_t resultId = this->allocateId();
@@ -896,7 +896,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::newVarInit(
+  API uint32_t APIENTRY SpirvModule::newVarInit(
           uint32_t                pointerType,
           spv::StorageClass       storageClass,
           uint32_t                initialValue) {
@@ -917,7 +917,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::functionBegin(
+  API void APIENTRY SpirvModule::functionBegin(
           uint32_t                returnType,
           uint32_t                functionId,
           uint32_t                functionType,
@@ -930,7 +930,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::functionParameter(
+  API uint32_t APIENTRY SpirvModule::functionParameter(
           uint32_t                parameterType) {
     uint32_t parameterId = this->allocateId();
     
@@ -941,12 +941,12 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::functionEnd() {
+  API void APIENTRY SpirvModule::functionEnd() {
     m_code.putIns (spv::OpFunctionEnd, 1);
   }
 
 
-  uint32_t SpirvModule::opAccessChain(
+  API uint32_t APIENTRY SpirvModule::opAccessChain(
           uint32_t                resultType,
           uint32_t                composite,
           uint32_t                indexCount,
@@ -964,7 +964,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opArrayLength(
+    API uint32_t APIENTRY SpirvModule::opArrayLength(
           uint32_t                resultType,
           uint32_t                structure,
           uint32_t                memberId) {
@@ -979,7 +979,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAny(
+    API uint32_t APIENTRY SpirvModule::opAny(
           uint32_t                resultType,
           uint32_t                vector) {
     uint32_t resultId = this->allocateId();
@@ -992,7 +992,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAll(
+    API uint32_t APIENTRY SpirvModule::opAll(
           uint32_t                resultType,
           uint32_t                vector) {
     uint32_t resultId = this->allocateId();
@@ -1005,7 +1005,7 @@ namespace dxvk {
   }
   
     
-  uint32_t SpirvModule::opAtomicLoad(
+    API uint32_t APIENTRY SpirvModule::opAtomicLoad(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1022,7 +1022,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opAtomicStore(
+  API void APIENTRY SpirvModule::opAtomicStore(
           uint32_t                pointer,
           uint32_t                scope,
           uint32_t                semantics,
@@ -1035,7 +1035,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicExchange(
+    API uint32_t APIENTRY SpirvModule::opAtomicExchange(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1054,7 +1054,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicCompareExchange(
+    API uint32_t APIENTRY SpirvModule::opAtomicCompareExchange(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1077,7 +1077,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicIIncrement(
+    API uint32_t APIENTRY SpirvModule::opAtomicIIncrement(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1094,7 +1094,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicIDecrement(
+    API uint32_t APIENTRY SpirvModule::opAtomicIDecrement(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1111,7 +1111,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicIAdd(
+    API uint32_t APIENTRY SpirvModule::opAtomicIAdd(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1130,7 +1130,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicISub(
+    API uint32_t APIENTRY SpirvModule::opAtomicISub(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1149,7 +1149,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicSMin(
+    API uint32_t APIENTRY SpirvModule::opAtomicSMin(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1168,7 +1168,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicSMax(
+    API uint32_t APIENTRY SpirvModule::opAtomicSMax(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1187,7 +1187,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicUMin(
+    API uint32_t APIENTRY SpirvModule::opAtomicUMin(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1206,7 +1206,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicUMax(
+    API uint32_t APIENTRY SpirvModule::opAtomicUMax(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1225,7 +1225,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicAnd(
+    API uint32_t APIENTRY SpirvModule::opAtomicAnd(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1244,7 +1244,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicOr(
+    API uint32_t APIENTRY SpirvModule::opAtomicOr(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1263,7 +1263,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opAtomicXor(
+    API uint32_t APIENTRY SpirvModule::opAtomicXor(
           uint32_t                resultType,
           uint32_t                pointer,
           uint32_t                scope,
@@ -1282,7 +1282,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitcast(
+    API uint32_t APIENTRY SpirvModule::opBitcast(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1295,7 +1295,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitCount(
+    API uint32_t APIENTRY SpirvModule::opBitCount(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1308,7 +1308,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitReverse(
+    API uint32_t APIENTRY SpirvModule::opBitReverse(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1321,7 +1321,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFindILsb(
+    API uint32_t APIENTRY SpirvModule::opFindILsb(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1336,7 +1336,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFindUMsb(
+    API uint32_t APIENTRY SpirvModule::opFindUMsb(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1351,7 +1351,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFindSMsb(
+    API uint32_t APIENTRY SpirvModule::opFindSMsb(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1366,7 +1366,7 @@ namespace dxvk {
   }
   
             
-  uint32_t SpirvModule::opBitFieldInsert(
+    API uint32_t APIENTRY SpirvModule::opBitFieldInsert(
           uint32_t                resultType,
           uint32_t                base,
           uint32_t                insert,
@@ -1385,7 +1385,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitFieldSExtract(
+    API uint32_t APIENTRY SpirvModule::opBitFieldSExtract(
           uint32_t                resultType,
           uint32_t                base,
           uint32_t                offset,
@@ -1402,7 +1402,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitFieldUExtract(
+    API uint32_t APIENTRY SpirvModule::opBitFieldUExtract(
           uint32_t                resultType,
           uint32_t                base,
           uint32_t                offset,
@@ -1419,7 +1419,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitwiseAnd(
+    API uint32_t APIENTRY SpirvModule::opBitwiseAnd(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -1434,7 +1434,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitwiseOr(
+    API uint32_t APIENTRY SpirvModule::opBitwiseOr(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -1449,7 +1449,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opBitwiseXor(
+    API uint32_t APIENTRY SpirvModule::opBitwiseXor(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -1464,7 +1464,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opNot(
+    API uint32_t APIENTRY SpirvModule::opNot(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1477,7 +1477,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opShiftLeftLogical(
+    API uint32_t APIENTRY SpirvModule::opShiftLeftLogical(
           uint32_t                resultType,
           uint32_t                base,
           uint32_t                shift) {
@@ -1492,7 +1492,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opShiftRightArithmetic(
+    API uint32_t APIENTRY SpirvModule::opShiftRightArithmetic(
           uint32_t                resultType,
           uint32_t                base,
           uint32_t                shift) {
@@ -1507,7 +1507,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opShiftRightLogical(
+    API uint32_t APIENTRY SpirvModule::opShiftRightLogical(
           uint32_t                resultType,
           uint32_t                base,
           uint32_t                shift) {
@@ -1522,7 +1522,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opConvertFtoS(
+    API uint32_t APIENTRY SpirvModule::opConvertFtoS(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1535,7 +1535,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opConvertFtoU(
+    API uint32_t APIENTRY SpirvModule::opConvertFtoU(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1548,7 +1548,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opConvertStoF(
+    API uint32_t APIENTRY SpirvModule::opConvertStoF(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1561,7 +1561,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opConvertUtoF(
+    API uint32_t APIENTRY SpirvModule::opConvertUtoF(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1574,7 +1574,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opCompositeConstruct(
+    API uint32_t APIENTRY SpirvModule::opCompositeConstruct(
           uint32_t                resultType,
           uint32_t                valueCount,
     const uint32_t*               valueArray) {
@@ -1590,7 +1590,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opCompositeExtract(
+    API uint32_t APIENTRY SpirvModule::opCompositeExtract(
           uint32_t                resultType,
           uint32_t                composite,
           uint32_t                indexCount,
@@ -1608,7 +1608,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opCompositeInsert(
+    API uint32_t APIENTRY SpirvModule::opCompositeInsert(
           uint32_t                resultType,
           uint32_t                object,
           uint32_t                composite,
@@ -1628,7 +1628,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDpdx(
+    API uint32_t APIENTRY SpirvModule::opDpdx(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1641,7 +1641,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDpdy(
+    API uint32_t APIENTRY SpirvModule::opDpdy(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1654,7 +1654,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDpdxCoarse(
+    API uint32_t APIENTRY SpirvModule::opDpdxCoarse(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1667,7 +1667,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDpdyCoarse(
+    API uint32_t APIENTRY SpirvModule::opDpdyCoarse(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1680,7 +1680,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDpdxFine(
+    API uint32_t APIENTRY SpirvModule::opDpdxFine(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1693,7 +1693,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDpdyFine(
+    API uint32_t APIENTRY SpirvModule::opDpdyFine(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1706,7 +1706,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opVectorExtractDynamic(
+    API uint32_t APIENTRY SpirvModule::opVectorExtractDynamic(
           uint32_t                resultType,
           uint32_t                vector,
           uint32_t                index) {
@@ -1721,7 +1721,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opVectorShuffle(
+    API uint32_t APIENTRY SpirvModule::opVectorShuffle(
           uint32_t                resultType,
           uint32_t                vectorLeft,
           uint32_t                vectorRight,
@@ -1741,7 +1741,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSNegate(
+    API uint32_t APIENTRY SpirvModule::opSNegate(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1754,7 +1754,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFNegate(
+    API uint32_t APIENTRY SpirvModule::opFNegate(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1767,7 +1767,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSAbs(
+    API uint32_t APIENTRY SpirvModule::opSAbs(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1782,7 +1782,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFAbs(
+    API uint32_t APIENTRY SpirvModule::opFAbs(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1797,7 +1797,7 @@ namespace dxvk {
   }
 
 
-    uint32_t SpirvModule::opFSign(
+      API uint32_t APIENTRY SpirvModule::opFSign(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -1812,7 +1812,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opFMix(
+    API uint32_t APIENTRY SpirvModule::opFMix(
           uint32_t                resultType,
           uint32_t                x,
           uint32_t                y,
@@ -1831,7 +1831,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opCross(
+    API uint32_t APIENTRY SpirvModule::opCross(
           uint32_t                resultType,
           uint32_t                x,
           uint32_t                y) {
@@ -1848,7 +1848,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opIAdd(
+    API uint32_t APIENTRY SpirvModule::opIAdd(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1863,7 +1863,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opISub(
+    API uint32_t APIENTRY SpirvModule::opISub(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1878,7 +1878,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFAdd(
+    API uint32_t APIENTRY SpirvModule::opFAdd(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1893,7 +1893,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFSub(
+    API uint32_t APIENTRY SpirvModule::opFSub(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1908,7 +1908,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSDiv(
+    API uint32_t APIENTRY SpirvModule::opSDiv(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1923,7 +1923,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUDiv(
+    API uint32_t APIENTRY SpirvModule::opUDiv(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1938,7 +1938,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSRem(
+    API uint32_t APIENTRY SpirvModule::opSRem(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1953,7 +1953,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUMod(
+    API uint32_t APIENTRY SpirvModule::opUMod(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1968,7 +1968,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFDiv(
+    API uint32_t APIENTRY SpirvModule::opFDiv(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1983,7 +1983,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opIMul(
+    API uint32_t APIENTRY SpirvModule::opIMul(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -1998,7 +1998,7 @@ namespace dxvk {
   }
   
     
-  uint32_t SpirvModule::opFMul(
+    API uint32_t APIENTRY SpirvModule::opFMul(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2013,7 +2013,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opVectorTimesScalar(
+    API uint32_t APIENTRY SpirvModule::opVectorTimesScalar(
     uint32_t                resultType,
     uint32_t                vector,
     uint32_t                scalar) {
@@ -2028,7 +2028,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opMatrixTimesMatrix(
+    API uint32_t APIENTRY SpirvModule::opMatrixTimesMatrix(
     uint32_t                resultType,
     uint32_t                a,
     uint32_t                b) {
@@ -2043,7 +2043,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opMatrixTimesVector(
+    API uint32_t APIENTRY SpirvModule::opMatrixTimesVector(
     uint32_t                resultType,
     uint32_t                matrix,
     uint32_t                vector) {
@@ -2058,7 +2058,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opVectorTimesMatrix(
+    API uint32_t APIENTRY SpirvModule::opVectorTimesMatrix(
     uint32_t                resultType,
     uint32_t                vector,
     uint32_t                matrix) {
@@ -2073,7 +2073,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opTranspose(
+    API uint32_t APIENTRY SpirvModule::opTranspose(
     uint32_t                resultType,
     uint32_t                matrix) {
     uint32_t resultId = this->allocateId();
@@ -2086,7 +2086,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opInverse(
+    API uint32_t APIENTRY SpirvModule::opInverse(
     uint32_t                resultType,
     uint32_t                matrix) {
     uint32_t resultId = this->allocateId();
@@ -2101,7 +2101,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opFFma(
+    API uint32_t APIENTRY SpirvModule::opFFma(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b,
@@ -2120,7 +2120,7 @@ namespace dxvk {
   }
     
   
-  uint32_t SpirvModule::opFMax(
+    API uint32_t APIENTRY SpirvModule::opFMax(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2137,7 +2137,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFMin(
+    API uint32_t APIENTRY SpirvModule::opFMin(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2154,7 +2154,7 @@ namespace dxvk {
   }
     
   
-  uint32_t SpirvModule::opNMax(
+    API uint32_t APIENTRY SpirvModule::opNMax(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2171,7 +2171,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opNMin(
+    API uint32_t APIENTRY SpirvModule::opNMin(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2188,7 +2188,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSMax(
+    API uint32_t APIENTRY SpirvModule::opSMax(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2205,7 +2205,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSMin(
+    API uint32_t APIENTRY SpirvModule::opSMin(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2222,7 +2222,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUMax(
+    API uint32_t APIENTRY SpirvModule::opUMax(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2239,7 +2239,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUMin(
+    API uint32_t APIENTRY SpirvModule::opUMin(
           uint32_t                resultType,
           uint32_t                a,
           uint32_t                b) {
@@ -2256,7 +2256,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFClamp(
+  API uint32_t APIENTRY SpirvModule::opFClamp(
           uint32_t                resultType,
           uint32_t                x,
           uint32_t                minVal,
@@ -2275,7 +2275,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opNClamp(
+    API uint32_t APIENTRY SpirvModule::opNClamp(
           uint32_t                resultType,
           uint32_t                x,
           uint32_t                minVal,
@@ -2294,7 +2294,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opIEqual(
+    API uint32_t APIENTRY SpirvModule::opIEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2309,7 +2309,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opINotEqual(
+    API uint32_t APIENTRY SpirvModule::opINotEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2324,7 +2324,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSLessThan(
+    API uint32_t APIENTRY SpirvModule::opSLessThan(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2339,7 +2339,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSLessThanEqual(
+    API uint32_t APIENTRY SpirvModule::opSLessThanEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2354,7 +2354,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSGreaterThan(
+    API uint32_t APIENTRY SpirvModule::opSGreaterThan(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2369,7 +2369,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSGreaterThanEqual(
+    API uint32_t APIENTRY SpirvModule::opSGreaterThanEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2384,7 +2384,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opULessThan(
+    API uint32_t APIENTRY SpirvModule::opULessThan(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2399,7 +2399,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opULessThanEqual(
+    API uint32_t APIENTRY SpirvModule::opULessThanEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2414,7 +2414,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUGreaterThan(
+    API uint32_t APIENTRY SpirvModule::opUGreaterThan(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2429,7 +2429,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUGreaterThanEqual(
+    API uint32_t APIENTRY SpirvModule::opUGreaterThanEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2444,7 +2444,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFOrdEqual(
+    API uint32_t APIENTRY SpirvModule::opFOrdEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2459,7 +2459,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFOrdNotEqual(
+    API uint32_t APIENTRY SpirvModule::opFOrdNotEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2474,7 +2474,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFOrdLessThan(
+    API uint32_t APIENTRY SpirvModule::opFOrdLessThan(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2489,7 +2489,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFOrdLessThanEqual(
+    API uint32_t APIENTRY SpirvModule::opFOrdLessThanEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2504,7 +2504,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFOrdGreaterThan(
+    API uint32_t APIENTRY SpirvModule::opFOrdGreaterThan(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2519,7 +2519,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFOrdGreaterThanEqual(
+    API uint32_t APIENTRY SpirvModule::opFOrdGreaterThanEqual(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2534,7 +2534,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLogicalEqual(
+    API uint32_t APIENTRY SpirvModule::opLogicalEqual(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -2549,7 +2549,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLogicalNotEqual(
+    API uint32_t APIENTRY SpirvModule::opLogicalNotEqual(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -2564,7 +2564,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLogicalAnd(
+    API uint32_t APIENTRY SpirvModule::opLogicalAnd(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -2579,7 +2579,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLogicalOr(
+    API uint32_t APIENTRY SpirvModule::opLogicalOr(
           uint32_t                resultType,
           uint32_t                operand1,
           uint32_t                operand2) {
@@ -2594,7 +2594,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLogicalNot(
+    API uint32_t APIENTRY SpirvModule::opLogicalNot(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2607,7 +2607,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opDot(
+    API uint32_t APIENTRY SpirvModule::opDot(
           uint32_t                resultType,
           uint32_t                vector1,
           uint32_t                vector2) {
@@ -2622,7 +2622,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSin(
+    API uint32_t APIENTRY SpirvModule::opSin(
           uint32_t                resultType,
           uint32_t                vector) {
     uint32_t resultId = this->allocateId();
@@ -2637,7 +2637,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opCos(
+    API uint32_t APIENTRY SpirvModule::opCos(
           uint32_t                resultType,
           uint32_t                vector) {
     uint32_t resultId = this->allocateId();
@@ -2652,7 +2652,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSqrt(
+    API uint32_t APIENTRY SpirvModule::opSqrt(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2667,7 +2667,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opInverseSqrt(
+    API uint32_t APIENTRY SpirvModule::opInverseSqrt(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2682,7 +2682,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opNormalize(
+    API uint32_t APIENTRY SpirvModule::opNormalize(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2697,7 +2697,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opReflect(
+    API uint32_t APIENTRY SpirvModule::opReflect(
           uint32_t                resultType,
           uint32_t                incident,
           uint32_t                normal) {
@@ -2714,7 +2714,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opLength(
+    API uint32_t APIENTRY SpirvModule::opLength(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2729,7 +2729,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opExp2(
+    API uint32_t APIENTRY SpirvModule::opExp2(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2744,7 +2744,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opExp(
+    API uint32_t APIENTRY SpirvModule::opExp(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2759,7 +2759,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLog2(
+    API uint32_t APIENTRY SpirvModule::opLog2(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2773,7 +2773,7 @@ namespace dxvk {
     return resultId;
   }
 
-  uint32_t SpirvModule::opPow(
+    API uint32_t APIENTRY SpirvModule::opPow(
     uint32_t                resultType,
     uint32_t                base,
     uint32_t                exponent) {
@@ -2789,7 +2789,7 @@ namespace dxvk {
     return resultId;
   }
   
-  uint32_t SpirvModule::opFract(
+    API uint32_t APIENTRY SpirvModule::opFract(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2804,7 +2804,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opCeil(
+    API uint32_t APIENTRY SpirvModule::opCeil(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2819,7 +2819,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFloor(
+    API uint32_t APIENTRY SpirvModule::opFloor(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2834,7 +2834,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opRound(
+    API uint32_t APIENTRY SpirvModule::opRound(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2849,7 +2849,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opRoundEven(
+    API uint32_t APIENTRY SpirvModule::opRoundEven(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2864,7 +2864,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opTrunc(
+    API uint32_t APIENTRY SpirvModule::opTrunc(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2879,7 +2879,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opFConvert(
+    API uint32_t APIENTRY SpirvModule::opFConvert(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2892,7 +2892,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opPackHalf2x16(
+    API uint32_t APIENTRY SpirvModule::opPackHalf2x16(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2907,7 +2907,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opUnpackHalf2x16(
+    API uint32_t APIENTRY SpirvModule::opUnpackHalf2x16(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2922,7 +2922,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opSelect(
+    API uint32_t APIENTRY SpirvModule::opSelect(
           uint32_t                resultType,
           uint32_t                condition,
           uint32_t                operand1,
@@ -2939,7 +2939,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opIsNan(
+    API uint32_t APIENTRY SpirvModule::opIsNan(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2952,7 +2952,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opIsInf(
+    API uint32_t APIENTRY SpirvModule::opIsInf(
           uint32_t                resultType,
           uint32_t                operand) {
     uint32_t resultId = this->allocateId();
@@ -2965,7 +2965,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opFunctionCall(
+    API uint32_t APIENTRY SpirvModule::opFunctionCall(
           uint32_t                resultType,
           uint32_t                functionId,
           uint32_t                argCount,
@@ -2983,7 +2983,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opLabel(uint32_t labelId) {
+  API void APIENTRY SpirvModule::opLabel(uint32_t labelId) {
     m_code.putIns (spv::OpLabel, 2);
     m_code.putWord(labelId);
 
@@ -2991,14 +2991,14 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opLoad(
+    API uint32_t APIENTRY SpirvModule::opLoad(
           uint32_t                typeId,
           uint32_t                pointerId) {
     return opLoad(typeId, pointerId, SpirvMemoryOperands());
   }
 
 
-  uint32_t SpirvModule::opLoad(
+    API uint32_t APIENTRY SpirvModule::opLoad(
           uint32_t                typeId,
           uint32_t                pointerId,
     const SpirvMemoryOperands&    operands) {
@@ -3014,14 +3014,14 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opStore(
+  API void APIENTRY SpirvModule::opStore(
           uint32_t                pointerId,
           uint32_t                valueId) {
     opStore(pointerId, valueId, SpirvMemoryOperands());
   }
 
 
-  void SpirvModule::opStore(
+  API void APIENTRY SpirvModule::opStore(
           uint32_t                pointerId,
           uint32_t                valueId,
     const SpirvMemoryOperands&    operands) {
@@ -3033,7 +3033,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opInterpolateAtCentroid(
+    API uint32_t APIENTRY SpirvModule::opInterpolateAtCentroid(
           uint32_t                resultType,
           uint32_t                interpolant) {
     uint32_t resultId = this->allocateId();
@@ -3048,7 +3048,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opInterpolateAtSample(
+    API uint32_t APIENTRY SpirvModule::opInterpolateAtSample(
           uint32_t                resultType,
           uint32_t                interpolant,
           uint32_t                sample) {
@@ -3065,7 +3065,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opInterpolateAtOffset(
+    API uint32_t APIENTRY SpirvModule::opInterpolateAtOffset(
           uint32_t                resultType,
           uint32_t                interpolant,
           uint32_t                offset) {
@@ -3082,7 +3082,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opImage(
+    API uint32_t APIENTRY SpirvModule::opImage(
           uint32_t                resultType,
           uint32_t                sampledImage) {
     uint32_t resultId = this->allocateId();
@@ -3095,7 +3095,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageRead(
+    API uint32_t APIENTRY SpirvModule::opImageRead(
           uint32_t                resultType,
           uint32_t                image,
           uint32_t                coordinates,
@@ -3117,7 +3117,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opImageWrite(
+  API void APIENTRY SpirvModule::opImageWrite(
           uint32_t                image,
           uint32_t                coordinates,
           uint32_t                texel,
@@ -3132,7 +3132,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageSparseTexelsResident(
+    API uint32_t APIENTRY SpirvModule::opImageSparseTexelsResident(
           uint32_t                resultType,
           uint32_t                residentCode) {
     uint32_t resultId = this->allocateId();
@@ -3146,7 +3146,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opSampledImage(
+    API uint32_t APIENTRY SpirvModule::opSampledImage(
           uint32_t                resultType,
           uint32_t                image,
           uint32_t                sampler) {
@@ -3161,7 +3161,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageTexelPointer(
+    API uint32_t APIENTRY SpirvModule::opImageTexelPointer(
           uint32_t                resultType,
           uint32_t                image,
           uint32_t                coordinates,
@@ -3178,7 +3178,7 @@ namespace dxvk {
   }
   
     
-  uint32_t SpirvModule::opImageQuerySizeLod(
+    API uint32_t APIENTRY SpirvModule::opImageQuerySizeLod(
           uint32_t                resultType,
           uint32_t                image,
           uint32_t                lod) {
@@ -3193,7 +3193,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageQuerySize(
+    API uint32_t APIENTRY SpirvModule::opImageQuerySize(
           uint32_t                resultType,
           uint32_t                image) {
     uint32_t resultId = this->allocateId();
@@ -3206,7 +3206,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageQueryLevels(
+    API uint32_t APIENTRY SpirvModule::opImageQueryLevels(
           uint32_t                resultType,
           uint32_t                image) {
     uint32_t resultId = this->allocateId();
@@ -3219,7 +3219,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageQueryLod(
+    API uint32_t APIENTRY SpirvModule::opImageQueryLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates) {
@@ -3234,7 +3234,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageQuerySamples(
+    API uint32_t APIENTRY SpirvModule::opImageQuerySamples(
           uint32_t                resultType,
           uint32_t                image) {
     uint32_t resultId = this->allocateId();
@@ -3247,7 +3247,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageFetch(
+    API uint32_t APIENTRY SpirvModule::opImageFetch(
           uint32_t                resultType,
           uint32_t                image,
           uint32_t                coordinates,
@@ -3269,7 +3269,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageGather(
+    API uint32_t APIENTRY SpirvModule::opImageGather(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3293,7 +3293,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageDrefGather(
+    API uint32_t APIENTRY SpirvModule::opImageDrefGather(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3317,7 +3317,7 @@ namespace dxvk {
   }
   
     
-  uint32_t SpirvModule::opImageSampleImplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleImplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3339,7 +3339,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageSampleExplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleExplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3361,7 +3361,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opImageSampleProjImplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleProjImplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3383,7 +3383,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageSampleProjExplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleProjExplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3405,7 +3405,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageSampleDrefImplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleDrefImplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3429,7 +3429,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opImageSampleDrefExplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleDrefExplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3453,7 +3453,7 @@ namespace dxvk {
   }
   
 
-  uint32_t SpirvModule::opImageSampleProjDrefImplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleProjDrefImplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3477,7 +3477,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opImageSampleProjDrefExplicitLod(
+    API uint32_t APIENTRY SpirvModule::opImageSampleProjDrefExplicitLod(
           uint32_t                resultType,
           uint32_t                sampledImage,
           uint32_t                coordinates,
@@ -3501,7 +3501,7 @@ namespace dxvk {
   }
 
   
-  uint32_t SpirvModule::opGroupNonUniformBallot(
+    API uint32_t APIENTRY SpirvModule::opGroupNonUniformBallot(
           uint32_t                resultType,
           uint32_t                execution,
           uint32_t                predicate) {
@@ -3516,7 +3516,7 @@ namespace dxvk {
   }
 
   
-  uint32_t SpirvModule::opGroupNonUniformBallotBitCount(
+    API uint32_t APIENTRY SpirvModule::opGroupNonUniformBallotBitCount(
           uint32_t                resultType,
           uint32_t                execution,
           uint32_t                operation,
@@ -3533,7 +3533,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::opGroupNonUniformElect(
+    API uint32_t APIENTRY SpirvModule::opGroupNonUniformElect(
           uint32_t                resultType,
           uint32_t                execution) {
     uint32_t resultId = this->allocateId();
@@ -3546,7 +3546,7 @@ namespace dxvk {
   }
 
   
-  uint32_t SpirvModule::opGroupNonUniformBroadcastFirst(
+    API uint32_t APIENTRY SpirvModule::opGroupNonUniformBroadcastFirst(
           uint32_t                resultType,
           uint32_t                execution,
           uint32_t                value) {
@@ -3561,7 +3561,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::opControlBarrier(
+  API void APIENTRY SpirvModule::opControlBarrier(
           uint32_t                execution,
           uint32_t                memory,
           uint32_t                semantics) {
@@ -3572,7 +3572,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opMemoryBarrier(
+  API void APIENTRY SpirvModule::opMemoryBarrier(
           uint32_t                memory,
           uint32_t                semantics) {
     m_code.putIns (spv::OpMemoryBarrier, 3);
@@ -3581,7 +3581,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opLoopMerge(
+  API void APIENTRY SpirvModule::opLoopMerge(
           uint32_t                mergeBlock,
           uint32_t                continueTarget,
           uint32_t                loopControl) {
@@ -3592,7 +3592,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opSelectionMerge(
+  API void APIENTRY SpirvModule::opSelectionMerge(
           uint32_t                mergeBlock,
           uint32_t                selectionControl) {
     m_code.putIns (spv::OpSelectionMerge, 3);
@@ -3601,7 +3601,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opBranch(
+  API void APIENTRY SpirvModule::opBranch(
           uint32_t                label) {
     m_code.putIns (spv::OpBranch, 2);
     m_code.putWord(label);
@@ -3610,7 +3610,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opBranchConditional(
+  API void APIENTRY SpirvModule::opBranchConditional(
           uint32_t                condition,
           uint32_t                trueLabel,
           uint32_t                falseLabel) {
@@ -3623,7 +3623,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opSwitch(
+  API void APIENTRY SpirvModule::opSwitch(
           uint32_t                selector,
           uint32_t                jumpDefault,
           uint32_t                caseCount,
@@ -3641,7 +3641,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::opPhi(
+    API uint32_t APIENTRY SpirvModule::opPhi(
           uint32_t                resultType,
           uint32_t                sourceCount,
     const SpirvPhiLabel*          sourceLabels) {
@@ -3660,18 +3660,18 @@ namespace dxvk {
   }
   
     
-  void SpirvModule::opReturn() {
+  API void APIENTRY SpirvModule::opReturn() {
     m_code.putIns (spv::OpReturn, 1);
     m_blockId = 0;
   }
   
   
-  void SpirvModule::opDemoteToHelperInvocation() {
+  API void APIENTRY SpirvModule::opDemoteToHelperInvocation() {
     m_code.putIns (spv::OpDemoteToHelperInvocation, 1);
   }
   
   
-  void SpirvModule::opEmitVertex(
+  API void APIENTRY SpirvModule::opEmitVertex(
           uint32_t                streamId) {
     if (streamId == 0) {
       m_code.putIns (spv::OpEmitVertex, 1);
@@ -3682,7 +3682,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opEndPrimitive(
+  API void APIENTRY SpirvModule::opEndPrimitive(
           uint32_t                streamId) {
     if (streamId == 0) {
       m_code.putIns (spv::OpEndPrimitive, 1);
@@ -3693,17 +3693,17 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::opBeginInvocationInterlock() {
+  API void APIENTRY SpirvModule::opBeginInvocationInterlock() {
     m_code.putIns(spv::OpBeginInvocationInterlockEXT, 1);
   }
 
 
-  void SpirvModule::opEndInvocationInterlock() {
+  API void APIENTRY SpirvModule::opEndInvocationInterlock() {
     m_code.putIns(spv::OpEndInvocationInterlockEXT, 1);
   }
 
 
-  uint32_t SpirvModule::defType(
+  API uint32_t APIENTRY SpirvModule::defType(
           spv::Op                 op, 
           uint32_t                argCount,
     const uint32_t*               argIds) {
@@ -3732,7 +3732,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::defConst(
+  API uint32_t APIENTRY SpirvModule::defConst(
           spv::Op                 op,
           uint32_t                typeId,
           uint32_t                argCount,
@@ -3767,7 +3767,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::instImportGlsl450() {
+  API void APIENTRY SpirvModule::instImportGlsl450() {
     m_instExtGlsl450 = this->allocateId();
     const char* name = "GLSL.std.450";
     
@@ -3777,7 +3777,7 @@ namespace dxvk {
   }
   
   
-  uint32_t SpirvModule::getMemoryOperandWordCount(
+  API uint32_t APIENTRY SpirvModule::getMemoryOperandWordCount(
     const SpirvMemoryOperands&    op) const {
     const uint32_t result
       = ((op.flags & spv::MemoryAccessAlignedMask)              ? 1 : 0)
@@ -3788,7 +3788,7 @@ namespace dxvk {
   }
 
 
-  void SpirvModule::putMemoryOperands(
+  API void APIENTRY SpirvModule::putMemoryOperands(
     const SpirvMemoryOperands&    op) {
     if (op.flags) {
       m_code.putWord(op.flags);
@@ -3805,7 +3805,7 @@ namespace dxvk {
   }
 
 
-  uint32_t SpirvModule::getImageOperandWordCount(const SpirvImageOperands& op) const {
+  API uint32_t APIENTRY SpirvModule::getImageOperandWordCount(const SpirvImageOperands& op) const {
     // Each flag may add one or more operands
     const uint32_t result
       = ((op.flags & spv::ImageOperandsBiasMask)                ? 1 : 0)
@@ -3824,7 +3824,7 @@ namespace dxvk {
   }
   
   
-  void SpirvModule::putImageOperands(const SpirvImageOperands& op) {
+  API void APIENTRY SpirvModule::putImageOperands(const SpirvImageOperands& op) {
     if (op.flags) {
       m_code.putWord(op.flags);
       
