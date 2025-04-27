@@ -16,7 +16,7 @@ pub fn main() !void {
     );
     defer allocator.free(contents);
 
-    const compiled = d2g.decompile_to_string(contents.ptr, contents.len);
+    const compiled = d2g.decompile_to_hlsl(contents.ptr, contents.len);
     defer d2g.free_compiled_string(compiled);
 
     std.debug.print("{s}\n", .{compiled});

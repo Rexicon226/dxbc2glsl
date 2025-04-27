@@ -13,7 +13,8 @@
 extern "C" {
 #endif
 
-API const char* APIENTRY decompile_to_string(const char* input, size_t input_size);
+API const char* APIENTRY decompile_to_glsl(const char* input, size_t input_size);
+API const char* APIENTRY decompile_to_hlsl(const char* input, size_t input_size);
 API void APIENTRY free_compiled_string(const char* compiledString);
 
 #ifdef __cplusplus
