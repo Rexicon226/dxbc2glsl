@@ -1,0 +1,16 @@
+.{
+    .name = .dxbc2glsl,
+    .version = "0.1.0",
+    .dependencies = .{
+        .vk = .{
+            .url = "git+https://github.com/KhronosGroup/Vulkan-Headers#e2e53a724677f6eba8ff0ce1ccb64ee321785cbd",
+            .hash = "N-V-__8AAMjV7gGH3DKcxHoM9tIKAxu9ypDzlJHSgEhQ8v_f",
+        },
+    },
+    .fingerprint = 0x76b17f450ffd60b7,
+    .paths = .{
+        "src",
+        "build.zig",
+        "build.zig.zon",
+    },
+}
