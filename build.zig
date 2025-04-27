@@ -130,6 +130,7 @@ pub fn build(b: *std.Build) !void {
     });
     exe.linkLibrary(driver);
     exe.root_module.addImport("d2g", translate_c.createModule());
+    b.installArtifact(exe);
 
     const run = b.step("run", "");
     const run_artifact = b.addRunArtifact(exe);
