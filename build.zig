@@ -100,10 +100,13 @@ pub fn build(b: *std.Build) !void {
     });
     b.installArtifact(sc);
 
-    const driver = b.addExecutable(.{
-        .name = "translate",
-        .target = target,
-        .optimize = optimize,
+    const driver = b.addLibrary(.{
+        .linkage = .static,
+        .name = "dxbc2glsl",
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+        }),
     });
     driver.linkLibCpp();
     driver.addCSourceFile(.{ .file = b.path("src/driver.cpp") });
@@ -118,8 +121,23 @@ pub fn build(b: *std.Build) !void {
     driver.linkLibrary(spirv);
     b.installArtifact(driver);
 
+    const translate_c = b.addTranslateC(.{
+        .root_source_file = b.path("src/driver.h"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const exe = b.addExecutable(.{
+        .name = "translate",
+        .target = target,
+        .optimize = optimize,
+        .root_source_file = b.path("src/translate.zig"),
+    });
+    exe.linkLibrary(driver);
+    exe.root_module.addImport("d2g", translate_c.createModule());
+
     const run = b.step("run", "");
-    const run_artifact = b.addRunArtifact(driver);
+    const run_artifact = b.addRunArtifact(exe);
     if (b.args) |args| run_artifact.addArgs(args);
     run.dependOn(&run_artifact.step);
 }
