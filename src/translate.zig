@@ -34,7 +34,7 @@ pub fn main() !void {
     const compiled = switch (output) {
         .glsl => d2g.decompile_to_glsl(contents.ptr, contents.len),
         .hlsl => d2g.decompile_to_hlsl(contents.ptr, contents.len),
-    };
+    } orelse return error.FailedToCompile;
     defer d2g.free_compiled_string(compiled);
 
     std.debug.print("{s}\n", .{compiled});

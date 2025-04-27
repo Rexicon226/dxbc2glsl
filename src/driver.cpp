@@ -18,6 +18,7 @@ API const char* APIENTRY decompile_to_glsl(const char* input, size_t inputSize) 
       options.es = true;
       glsl.set_common_options(options);
       
+      glsl.build_combined_image_samplers();
       std::string compiledString = glsl.compile();
       
       char* resultStr = new char[compiledString.size() + 1];
@@ -47,6 +48,7 @@ API const char* APIENTRY decompile_to_hlsl(const char* input, size_t inputSize) 
       hlsl.set_common_options(glsl_options);
       hlsl.set_hlsl_options(hlsl_options);
       
+      hlsl.build_combined_image_samplers();
       std::string compiledString = hlsl.compile();
       
       char* resultStr = new char[compiledString.size() + 1];
