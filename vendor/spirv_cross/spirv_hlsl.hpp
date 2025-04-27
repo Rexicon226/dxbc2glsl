@@ -103,7 +103,7 @@ enum HLSLAuxBinding
 	HLSL_AUX_BINDING_BASE_VERTEX_INSTANCE = 0
 };
 
-class CompilerHLSL : public CompilerGLSL
+class API CompilerHLSL : public CompilerGLSL
 {
 public:
 	struct Options
